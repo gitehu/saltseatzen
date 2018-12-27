@@ -1,0 +1,94 @@
+---
+title: "Marihuana eta ikuspegi politikoa"
+author: "Norberto Asensio"
+date: "03/12/2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+##Ariketa
+
+Batxilergoko eta unibertsitateko ikasleei ikuspegi politiko eta mariguana erabilerari buruz galdetu zitzaien eta pdf taulan dauzkazun emaitzak topatu ziren (Iturria: Attitudes about Marijuana and Political Views, Psychological Reports, 1973: 1051-1054).
+
+<https://journals.sagepub.com/doi/abs/10.2466/pr0.1973.32.3c.1051?url_ver=Z39.88-2003&rfr_id=ori%3Arid%3Acrossref.org&rfr_dat=cr_pub%3Dpubmed>
+
+Datuek ikuspegi politikoa eta marihuanaren arteko erlazioa erakusten al zuten? Beharrezko analisia aukeratu ezazu galderari erantzuteko. Analisiaren emaitzak interpreta itzazu estilo zientifiko baten idatziz.
+
+##Analisia aukeratu
+
+Bi kategorien arteko erlazio bat egin nahi da beraz, kategoria bakoitzak hiru maila ezberdin dauzka non pertsonak atolatzen diren, maiztasunak alegia. Beraz, kontigentzi taula bat bilduko dugu Chi Karratua egin ahal izateko.
+
+##Datoak sartu
+
+```{r cars}
+maritaula2<- data.frame(liberala=c(479,173,119),
+                    kontzerbadorea=c(214,47,15),
+                       bestelakoa=c(119,45,85),
+                       row.names = c("inoiz ez","batzutan","askotan"))
+
+```
+
+grafiko sinple bat
+
+```{r}
+barplot(as.matrix(maritaula2))
+```
+
+Apur bat "txukunagoa" kode gehiago erabilita.
+
+```{r}
+barplot(as.matrix(maritaula2),
+        col=c("white","orange","green"),
+        main="ikuspegi politikoa eta marihuana erabilera",
+        border="blue",density=c(0,10,50),
+        xlab="ikuspegi politikoa",ylab="pertsona maiztasuna")
+legend("topright",legend =c("inoiz ez","batzutan","askotan"),
+       bty = "n",horiz=F,
+       fill=c("white","orange","green"),
+       density=c(0,10,50))
+```
+
+Egin dezagun Chi Karratuaren testa (eta chi.mari izeneko objetuari esleitu)
+
+```{r}
+(chi.mari<-chisq.test(maritaula2))
+```
+
+Marihuanaren erabilera eta ikuspegi politikoaren arteko erlazio estatistikoki esanguratsua dela (Chi Karratua = 88.55, ag = 4, p < 0.05) egin dezakegun lehengo interpretazioa da. Hau da, behatutako maiztasunen banaketa kasu bakoitzean ezin da azaldu zoriaren arauera.
+
+Mia dezagun apur bat gehiago zein kasuek sortzen duten erlazio esanguratsua ulertzeko.
+
+Hauek dira behatutako maiztasunak
+
+```{r}
+chi.mari$observed
+```
+
+hauek itxarondakoak
+
+```{r}
+chi.mari$expected
+```
+
+eta hauek hondakin estandarizatuak 
+
+```{r}
+chi.mari$stdres
+```
+
+Hondakin hauek bisualki ikusteko
+
+```{r}
+library(corrplot)
+corrplot(chi.mari$stdres, is.cor = FALSE)
+```
+
+Gogoratu 1.96 balio absolutoa baino gehiagoko balioek adierazten dutela esanguratsutasun estatistikoa. 
+
+##Interpretazioa
+
+Marihuanaren erabilera eta ikuspegi politikoaren arteko erlazio estatistikoki esanguratsua aurkitu da (Chi Karratua = 88.55, ag = 4, p < 0.05). Bestelako ikuspegi politikoa daukatenek espero baino gehiago erretzen dute marihuana askotan, kontzerbadoreak espero baino gutxiago erretzen dute askotan, eta liberalek espero baino gehiago erretzen dute marihuana batzutan, behaketa guzti hauek estatistikoki nabarmenak izanik (p < 0.05).
+
